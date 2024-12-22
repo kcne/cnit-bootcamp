@@ -36,5 +36,4 @@ const initializeDatabase = async () => {
     }
 };
 
-// Run the script
 initializeDatabase();

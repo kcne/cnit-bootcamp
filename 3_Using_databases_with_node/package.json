@@ -1,7 +1,7 @@
 {
   "name": "3_using_databases_with_node",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init-db": "node config/init-db.js",
