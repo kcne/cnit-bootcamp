@@ -1,8 +1,16 @@
 // modal.jsx
 import React from 'react';
 
-// props:
-// isOpen: boolean => odredjuje da li je modal otvoren
+
+// Props:
+// isOpen: boolean =>
+// when true => render modal
+// when false => return null
+
+// onClose => () => void (funkcija)
+// koja se izvrsava po zatvaranju modala
+
+// children => ono sto cemo da rendereujemo unutar samog modala
 
 function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
