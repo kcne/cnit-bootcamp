@@ -4,13 +4,16 @@ import prisma from '../prisma'
 
 export const createLecture = async (req: Request, res: Response) => {
   const { name, description, duration } = req.body
+  // @ts-ignore
+  const user = req.user;
 
   try {
     const lecture = await prisma.lecture.create({
       data: {
         name,
         description,
-        duration: Number(duration)
+        duration: Number(duration),
+        userId: user.userId
       },
     })
     res.status(201).json(lecture)
@@ -20,9 +23,15 @@ export const createLecture = async (req: Request, res: Response) => {
 }
 
 export const getAllLectures = async (req: Request, res: Response): Promise<void> => {
+  // @ts-ignore
+  const userId = req.user.userId;
   try {
-    const lectures = await prisma.lecture.findMany();
-    res.json(lectures);
+    const lectures = await prisma.lecture.findMany({
+    where: {
+    userId: userId
+    }
+    });
+    res.json({lectures});
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch lecture' })
   }
@@ -56,3 +65,5 @@ export const deleteLecture = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to delete order' })
   }
 }
+
+

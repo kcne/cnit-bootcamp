@@ -46,6 +46,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
+  
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await prisma.user.create({
     data: { email, password: hashedPassword },

@@ -6,19 +6,19 @@ import { validate } from '../middlewares/validate';
 
 const router = express.Router()
 
-// const UserSchema = z.object({
-//   email: z.string().email(),
-//   password: z.string().min(6, "Password must be at least 6 characters long."),
-// });
+const UserSchema = z.object({
+  email: z.string().email("Not a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters long."),
+});
 
 // Get all users
 router.get('/users', getUsers)
 
 router.post('/users/login', login)
 
-router.post('/users/register', login)
+// router.post('/users/register', register)
 
-// router.post('/users/register', validate(UserSchema), register);
+router.post('/users/register', validate(UserSchema), register);
 
 // Get a user by ID
 router.get('/users/:id', getUserById)

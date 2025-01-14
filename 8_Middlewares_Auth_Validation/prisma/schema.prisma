@@ -16,7 +16,9 @@ model User {
   password  String
   roles    Role[]   @relation("UserRoles")
   orders   Order[]
+  lectures Lecture[]
 }
+
 
 model Profile {
   id        Int     @id @default(autoincrement())
@@ -48,6 +50,8 @@ model Lecture{
   name  String
   description String
   duration Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
 }
 
 
