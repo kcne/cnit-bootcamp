@@ -1,3 +1,4 @@
+// Object Relational Mapper
 generator client {
   provider = "prisma-client-js"
 }
@@ -38,5 +39,16 @@ model Role {
   id    Int    @id @default(autoincrement())
   name  String @unique
   users User[] @relation("UserRoles")
+  description String?
 }
+
+model Lecture{
+  id Int @id @default(autoincrement())
+  name  String
+  description String
+  duration Int
+}
+
+
+// npx prisma migrate dev --name add_lecture_model
 

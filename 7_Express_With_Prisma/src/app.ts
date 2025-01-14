@@ -3,6 +3,7 @@ import userRoutes from './routes/userRoutes'
 import profileRoutes from './routes/profileRoutes'
 import orderRoutes from './routes/orderRoutes'
 import roleRoutes from './routes/roleRoutes'
+import lectureRoutes from './routes/lectureRoutes'
 
 const app = express()
 
@@ -14,6 +15,7 @@ app.use('/api', userRoutes)
 app.use('/api', profileRoutes)
 app.use('/api', orderRoutes)
 app.use('/api', roleRoutes)
+app.use('/api', lectureRoutes)
 
 // Error handling for undefined routes
 app.use((req, res) => {
