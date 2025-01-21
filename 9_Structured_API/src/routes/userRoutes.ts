@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { validateRequest } from '../middlewares/validateRequest';
-import { registerSchema, loginSchema } from '../schemas/userValidator';
+import { registerSchema, loginSchema } from '../models/validators/userValidator';
 import { register, login, getUserInfo } from '../controllers/UserController';
-import asyncHandler from '../utils/asyncHandler';
+import asyncHandler from '../middlewares/asyncHandler';
 import authMiddleware from '../middlewares/authMiddleware';
 
 const router = Router();
