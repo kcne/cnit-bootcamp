@@ -25,6 +25,7 @@ model Profile {
   updatedAt DateTime @updatedAt
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int     @unique
+  dateOfBirth DateTime
 }
 
 model Order {

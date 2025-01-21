@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import prisma from '../prisma'
+import { AuthenticatedRequest } from '../middlewares/authenticateToken';
 
 
-export const createLecture = async (req: Request, res: Response) => {
+export const createLecture = async (req: AuthenticatedRequest, res: Response) => {
   const { name, description, duration } = req.body
-  // @ts-ignore
   const user = req.user;
 
   try {
@@ -22,8 +22,7 @@ export const createLecture = async (req: Request, res: Response) => {
   }
 }
 
-export const getAllLectures = async (req: Request, res: Response): Promise<void> => {
-  // @ts-ignore
+export const getAllLectures = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   const userId = req.user.userId;
   try {
     const lectures = await prisma.lecture.findMany({

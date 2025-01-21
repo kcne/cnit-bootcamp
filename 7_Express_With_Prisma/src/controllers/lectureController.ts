@@ -5,6 +5,7 @@ import prisma from '../prisma'
 export const createLecture = async (req: Request, res: Response) => {
   const { name, description, duration } = req.body
 
+
   try {
     const lecture = await prisma.lecture.create({
       data: {

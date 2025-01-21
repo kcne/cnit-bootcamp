@@ -2,12 +2,13 @@ import { Request, Response } from 'express'
 import prisma from '../prisma'
 
 export const createProfile = async (req: Request, res: Response) => {
-  const { userId, bio, age } = req.body
+  const { userId, bio, age, dateOfBirth } = req.body
   try {
     const profile = await prisma.profile.create({
       data: {
         bio,
         age,
+        dateOfBirth,
         user: { connect: { id: Number(userId) } },
       },
     })
