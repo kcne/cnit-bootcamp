@@ -4,6 +4,7 @@ import prisma from '../utils/prisma';
 import createHttpError from 'http-errors';
 
 
+
 export const register = async (data: { name: string; email: string; password: string }) => {
   // Check if user already exists with the given email
   const existingUser = await prisma.user.findUnique({ where: { email: data.email } });

@@ -3,6 +3,7 @@ import { ZodError } from 'zod';
 
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
   console.log(err);
+
   if (err instanceof ZodError) {
     res.status(400).json({
       message: 'Validation Error',
