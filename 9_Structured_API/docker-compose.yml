@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: e_termin_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: e-termin
+      POSTGRES_DB: e-termin
+    ports:
+      - "54321:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
