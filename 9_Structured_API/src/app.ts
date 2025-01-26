@@ -6,6 +6,7 @@ import authMiddleware from './middlewares/authMiddleware';
 import errorHandler from './middlewares/errorHandler';
 import { AuthenticatedRequest } from './types/AuthenticatedRequest';
 import dotenv from 'dotenv';
+import taskRoutes from './routes/taskRoutes';
 
 
 dotenv.config();
@@ -29,6 +30,9 @@ app.get('/protected', authMiddleware, (req:AuthenticatedRequest, res) => {
 
 // User routes
 app.use('/api/users', userRoutes);
+
+// Task routes
+app.use('/api/tasks', taskRoutes);
 
 // Catch-all route for undefined endpoints
 app.use((req, res) => {
