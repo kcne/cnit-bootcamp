@@ -35,3 +35,18 @@ model Tag {
   name  String @unique
   tasks Task[]
 }
+
+model Metadata{
+  id    Int    @id @default(autoincrement())
+  apiVersion Float @default(0.1)
+  apiName  String @unique
+  clients AppClients[]
+}
+
+model AppClients{
+  id    Int    @id @default(autoincrement())
+  name String
+  browser  String
+  metadataId Int
+  metadata Metadata @relation(fields: [metadataId], references: [id])
+}

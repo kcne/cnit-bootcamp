@@ -1,58 +1,51 @@
+import { useUpdateMetadata } from "@/api/mutations/update-metadata";
+import { useMetadata } from "@/api/queries/get-metadata";
 import { Button } from "@/components/ui/button";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 
-async function fetchMetadata() {
-  const res = await axios.get('http://localhost:3000/api/metadata');
-  return res.data;
-}
-
-async function updateMetadata(body:{name:string, description:string}) {
-  return axios.post('http://localhost:3000/api/metadata', body).then((res) => res.data);
-}
 
 function Home() {
 
-  const queryClient = useQueryClient();
+  const {data, isLoading, isError} = useMetadata();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['metadata'],
-    queryFn: fetchMetadata,
-  });
+  const { mutateAsync:addClient}  = useUpdateMetadata();
 
-  const mutation = useMutation({
-    mutationFn: updateMetadata,
-    mutationKey: ['updateMetadata'],
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['metadata'] });
-    },
-  });
-
-  const postMetadata  = async() => {
-    const body = {name:"CentarNit App", description:"New Description"}
-    await mutation.mutateAsync(body);
-  }
+  const postMetadata = async () => {
+    const body = { name: `Task Manager - React Vite App ${String(Math.floor(Math.random() * 1000) + 1)}`, browser: navigator.userAgent };
+    await addClient(body);
+  };
 
   return (
-    <div className="w-page h-page flex items-center justify-center">
-      {isLoading && <div>Loading....</div>}
-      {isError && <div>Error fetching data....</div>}
-      {data && (
-        <div>
-          <ul>
-            {Object.entries(data).map(([key, value]) => (
-              <li key={key}>
-                <strong>{key}:</strong>{" "}
-                {typeof value === "object" && value !== null ? JSON.stringify(value) : String(value)}
+    <div className="w-full h-screen flex items-center justify-center bg-gray-50">
+      <div className="p-6 bg-white rounded-lg shadow-md">
+        {isLoading && <div>Loading...</div>}
+        {isError && <div>Error fetching data...</div>}
+        {data ? (
+          <div>
+            <h1 className="text-lg font-semibold mb-4">Metadata</h1>
+            <ul className="space-y-2">
+              <li>
+                <strong>API Name:</strong> {data.apiName} <br />
+                <strong>API Version:</strong> {data.apiVersion} <br />
+                <strong>Clients:</strong>
+                <ul className="pl-4">
+                  {data.clients.map((client) => (
+                    <li key={client.id}>
+                      {client.name} ({client.browser})
+                    </li>
+                  ))}
+                </ul>
               </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <Button onClick = {postMetadata}>Mutate Data</Button>
+            </ul>
+          </div>
+        ) : (
+          <div>No metadata available</div>
+        )}
+        <Button onClick={postMetadata} className="mt-4">
+          Update Metadata
+        </Button>
+      </div>
     </div>
-  )
+  );
 }
 
 export default Home

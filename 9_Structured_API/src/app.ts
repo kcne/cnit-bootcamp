@@ -7,6 +7,7 @@ import errorHandler from './middlewares/errorHandler';
 import { AuthenticatedRequest } from './types/AuthenticatedRequest';
 import dotenv from 'dotenv';
 import taskRoutes from './routes/taskRoutes';
+import metadataRoutes from './routes/metadataRoutes';
 
 
 dotenv.config();
@@ -33,6 +34,9 @@ app.use('/api/users', userRoutes);
 
 // Task routes
 app.use('/api/tasks', taskRoutes);
+
+// Metadata routes
+app.use('/api/metadata', metadataRoutes);
 
 // Catch-all route for undefined endpoints
 app.use((req, res) => {
