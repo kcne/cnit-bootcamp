@@ -3,7 +3,7 @@ import { useUser } from "@/context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const navigate = useNavigate();
 
   // Redirect if user is not logged in
@@ -38,11 +38,17 @@ function Home() {
         <p className="text-gray-600 mb-4">
           <span className="font-semibold">Joined:</span> {formattedDate}
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex gap-3 items-center justify-center">
           <button
             className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
           >
             Dashboard
+          </button>
+          <button
+            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+            onClick={logout}
+          >
+            Logout
           </button>
         </div>
       </div>

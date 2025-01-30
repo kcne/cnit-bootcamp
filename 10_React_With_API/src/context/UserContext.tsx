@@ -40,9 +40,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      await axios.post('http://localhost:3000//api/users/register', { name, email, password });
-      // Automatically log in the user after registration
-      await login(email, password);
+      await axios.post('http://localhost:3000/api/users/register', { name, email, password });
     } catch (error) {
       console.error('Registration failed:', error);
       throw error;
