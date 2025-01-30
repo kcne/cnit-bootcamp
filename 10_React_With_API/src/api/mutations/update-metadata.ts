@@ -15,6 +15,6 @@ export function useUpdateMetadata(){
     mutationFn: updateMetadata,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['metadata'] });
-    },  
+    },
   });
 }
