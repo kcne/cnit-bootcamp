@@ -1,6 +1,8 @@
+import Form from "@/components/rhf-form"
+
 function Register() {
   return (
-    <div>Register</div>
+    <Form/>
   )
 }
 

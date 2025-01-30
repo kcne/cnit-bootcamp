@@ -1,51 +1,53 @@
-import { useUpdateMetadata } from "@/api/mutations/update-metadata";
-import { useMetadata } from "@/api/queries/get-metadata";
-import { Button } from "@/components/ui/button";
-
+import { useEffect } from "react";
+import { useUser } from "@/context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const { user } = useUser();
+  const navigate = useNavigate();
 
-  const {data, isLoading, isError} = useMetadata();
+  // Redirect if user is not logged in
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
-  const { mutateAsync:addClient}  = useUpdateMetadata();
+  // If there's no user, render nothing (or a loading spinner)
+  if (!user) {
+    return null;
+  }
 
-  const postMetadata = async () => {
-    const body = { name: `Task Manager - React Vite App ${String(Math.floor(Math.random() * 1000) + 1)}`, browser: navigator.userAgent };
-    await addClient(body);
-  };
+  // Format the createdAt date
+  const formattedDate = new Date(user.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gray-50">
-      <div className="p-6 bg-white rounded-lg shadow-md">
-        {isLoading && <div>Loading...</div>}
-        {isError && <div>Error fetching data...</div>}
-        {data ? (
-          <div>
-            <h1 className="text-lg font-semibold mb-4">Metadata</h1>
-            <ul className="space-y-2">
-              <li>
-                <strong>API Name:</strong> {data.apiName} <br />
-                <strong>API Version:</strong> {data.apiVersion} <br />
-                <strong>Clients:</strong>
-                <ul className="pl-4">
-                  {data.clients.map((client) => (
-                    <li key={client.id}>
-                      {client.name} ({client.browser})
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            </ul>
-          </div>
-        ) : (
-          <div>No metadata available</div>
-        )}
-        <Button onClick={postMetadata} className="mt-4">
-          Update Metadata
-        </Button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome, {user.name}!</h1>
+        <p className="text-gray-600 mb-2">
+          <span className="font-semibold">Email:</span> {user.email}
+        </p>
+        <p className="text-gray-600 mb-2">
+          <span className="font-semibold">User ID:</span> {user.id}
+        </p>
+        <p className="text-gray-600 mb-4">
+          <span className="font-semibold">Joined:</span> {formattedDate}
+        </p>
+        <div className="mt-6">
+          <button
+            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            Dashboard
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Home
+export default Home;

@@ -24,7 +24,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post('/api/login', { email, password });
+      const response = await axios.post('http://localhost:3000/api/users/login', { email, password });
       const { token, user } = response.data;
 
       // Save token to local storage
@@ -40,7 +40,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      await axios.post('/api/register', { name, email, password });
+      await axios.post('http://localhost:3000//api/users/register', { name, email, password });
       // Automatically log in the user after registration
       await login(email, password);
     } catch (error) {
@@ -60,7 +60,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem('authToken');
       if (!token) return;
 
-      const response = await axios.get('/api/me', {
+      const response = await axios.get('http://localhost:3000/api/users/me', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
