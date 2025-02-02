@@ -7,7 +7,7 @@ export const GetAllTasks = async (req: AuthenticatedRequest, res: Response) => {
 
     const tasks = await getAllTasks(Number(userId));
 
-    res.status(200).json(tasks);
+    res.status(200).json({tasks:tasks});
 };
 
 export const CreateTask = async (req: AuthenticatedRequest, res: Response) => {

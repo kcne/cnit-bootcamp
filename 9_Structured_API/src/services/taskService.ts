@@ -6,7 +6,7 @@ import { CreateTask, UpdateTask } from '../types/Task';
 
 export const getAllTasks = async (userId:number) => {
   // Create new user
-  const tasks = await prisma.task.findMany({where: { userId: userId}});
+  const tasks = await prisma.task.findMany({where: { userId: userId}, include: {tags:true}});
 
   return tasks;
 };
