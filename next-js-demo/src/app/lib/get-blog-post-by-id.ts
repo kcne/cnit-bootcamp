@@ -1,24 +1,25 @@
-import BlogPostCard from "../components/blog-post-card"
-import { BlogPost } from "../lib/types"
+"use server"
+import { BlogPost } from "./types";
 
 
 
-// Refactor this function to return all posts from the actual API 
-// fetch('https://dummyjson.com/posts')
+// Refactor to make an actual call to the API
+// fetch('https://dummyjson.com/posts/1')
 // .then(res => res.json())
 // .then(console.log);
 
-async function getBlogPosts(): Promise<BlogPost[]> {
+export async function getBlogPostById(id:string): Promise<BlogPost | undefined> {
   // In a real application, you would fetch this data from an API or database
   // For this example, we'll use mock data
-  return [
+
+   const blogPosts = [
     {
       id: "1",
       title: "Getting Started with Next.js",
       excerpt: "Learn how to build modern web applications with Next.js",
       date: "2023-05-01",
       author: "John Doe",
-      coverImage: "https://picsum.photos/seed/1/200/300",
+      coverImage: "https://picsum.photos/seed/1/400/600",
     },
     {
       id: "2",
@@ -45,20 +46,7 @@ async function getBlogPosts(): Promise<BlogPost[]> {
       coverImage: "https://picsum.photos/seed/4/400/600",
     }
   ]
+    const post = blogPosts.find(blogPost => blogPost.id==id);
+
+    return post;
 }
-
-export default async function BlogPage() {
-  const posts = await getBlogPosts()
-
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Our Blog</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map((post) => (
-          <BlogPostCard key={post.id} post={post} />
-        ))}
-      </div>
-    </div>
-  )
-}
-
