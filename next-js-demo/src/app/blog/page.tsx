@@ -1,14 +1,15 @@
-import BlogPostCard from "../components/blog-post-card"
-import { GetAllPostsResponse } from "../lib/types"
+
 
 // Refactor this function to return all posts from the actual API
 // fetch('https://dummyjson.com/posts')
 // .then(res => res.json())
 // .then(console.log);
 
+import BlogPostCard from "../components/blog-post-card";
+import { GetAllPostsResponse } from "../lib/types";
+
 async function getBlogPosts(): Promise<GetAllPostsResponse> {
     const posts = await fetch('https://dummyjson.com/posts').then(res => res.json())
-
     return posts;
 }
 
