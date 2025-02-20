@@ -1,9 +1,9 @@
 ---
-title: "Next.js Markdown Blog"
+title: "My new blog"
 date: "2025-02-20"
 ---
 
-## Welcome to My Blog 🎉
+## Welcome to my second blog 🎉
 
 
 This is a **markdown-powered** blog post styled using Tailwind Typography.
