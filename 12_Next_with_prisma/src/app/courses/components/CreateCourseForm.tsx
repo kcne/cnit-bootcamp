@@ -10,7 +10,7 @@ const formSchema = z.object({
   title: z.string().min(1, "Course title is required"),
   instructor: z.string().min(1, "Instructor name is required"),
   description: z.string().optional(),
-  duration: z.string()
+  duration: z.number()
     .min(1, "Duration is required")
     .refine(val => !isNaN(Number(val)) && Number(val) > 0, {
       message: "Duration must be a positive number"
