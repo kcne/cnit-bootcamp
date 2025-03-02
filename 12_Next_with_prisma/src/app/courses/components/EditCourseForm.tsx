@@ -11,14 +11,19 @@ const formSchema = z.object({
   title: z.string().min(1, "Course title is required"),
   instructor: z.string().min(1, "Instructor name is required"),
   description: z.string().optional(),
-  duration: z.number()
+  duration: z.string()
     .min(1, "Duration is required")
-    .refine(val => !isNaN(Number(val)) && Number(val) > 0, {
-      message: "Duration must be a positive number"
-    })
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, "Duration must be a positive number")
 })
 
-type FormData = z.infer<typeof formSchema>
+// Define the form input type before transformation
+type FormInput = {
+  title: string
+  instructor: string
+  description?: string
+  duration: string
+}
 
 export default function EditCourseForm({ course }: { course: Course }) {
   const router = useRouter()
@@ -26,17 +31,17 @@ export default function EditCourseForm({ course }: { course: Course }) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting }
-  } = useForm<FormData>({
+  } = useForm<FormInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: course.title,
       instructor: course.instructor,
       description: course.description || '',
-      duration: Number(course.duration)
+      duration: String(course.duration)
     }
   })
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: FormInput) => {
     try {
       const res = await fetch(`/api/courses/${course.id}`, {
         method: 'PUT',
@@ -140,4 +145,4 @@ export default function EditCourseForm({ course }: { course: Course }) {
       </div>
     </div>
   )
-} 
+}

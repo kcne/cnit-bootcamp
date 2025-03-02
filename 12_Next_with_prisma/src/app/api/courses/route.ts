@@ -6,52 +6,37 @@ const prisma = new PrismaClient()
 
 export async function GET() {
   try {
-    const courses = await prisma.course.findMany({
-      include: {
-        category: true
-      }
-    })
+    const courses = await prisma.course.findMany()
     return NextResponse.json(courses)
-  } catch (error) {
-    console.error('Error fetching courses:', error)
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch courses' },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const result = courseSchema.safeParse(body)
     
-    // Validate request body
-    const validationResult = courseSchema.safeParse(body)
-    
-    if (!validationResult.success) {
+    if (!result.success) {
       return NextResponse.json(
-        { error: validationResult.error.errors },
+        { error: result.error.errors },
         { status: 400 }
       )
     }
 
     const course = await prisma.course.create({
-      data: validationResult.data,
-      include: {
-        category: true
-      }
+      data: result.data
     })
 
     return NextResponse.json(course, { status: 201 })
-  } catch (error) {
-    console.error('Error creating course:', error)
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create course' },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 } 
