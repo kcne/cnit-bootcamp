@@ -7,7 +7,7 @@ async function main() {
   // Clear existing data
   await prisma.lecture.deleteMany();
   await prisma.user.deleteMany();
-  await prisma.product.deleteMany();
+  await prisma.inventory.deleteMany();
 
   // Create test users
   const password = await bcrypt.hash('password123', 10);
@@ -58,8 +58,8 @@ async function main() {
     }
   };
 
-  // Seed products
-  const productCategories = [
+  // Seed inventorys
+  const inventoryCategories = [
     'Electronics',
     'Books',
     'Clothing',
@@ -72,7 +72,7 @@ async function main() {
     'Automotive'
   ];
 
-  const productAdjectives = [
+  const inventoryAdjectives = [
     'Premium',
     'Essential',
     'Luxury',
@@ -85,21 +85,21 @@ async function main() {
     'Smart'
   ];
 
-  // Create 120 products
-  console.log('Starting to create products...');
+  // Create 120 inventorys
+  console.log('Starting to create inventorys...');
   for (let i = 1; i <= 120; i++) {
-    const category = productCategories[Math.floor(Math.random() * productCategories.length)];
-    const adjective = productAdjectives[Math.floor(Math.random() * productAdjectives.length)];
+    const category = inventoryCategories[Math.floor(Math.random() * inventoryCategories.length)];
+    const adjective = inventoryAdjectives[Math.floor(Math.random() * inventoryAdjectives.length)];
     
-    await prisma.product.create({
+    await prisma.inventory.create({
       data: {
         name: `${adjective} ${category} Item ${i}`,
-        description: `High-quality ${category.toLowerCase()} product with premium features and reliable performance.`,
+        description: `High-quality ${category.toLowerCase()} inventory with premium features and reliable performance.`,
       }
     });
-    if (i % 20 === 0) console.log(`Created ${i} products`);
+    if (i % 20 === 0) console.log(`Created ${i} inventorys`);
   }
-  console.log('Finished creating products');
+  console.log('Finished creating inventorys');
 
   // Create lectures for both users
   await createLecturesForUser(user1.id);

@@ -44,5 +44,14 @@ model Product{
 }
 
 
+model Inventory{
+  id Int @id @default(autoincrement())
+  name  String
+  description String
+  stock Int @default(1)
+  createdAt DateTime @default(now())
+}
+
+
 // npx prisma migrate dev --name add_lecture_model
 

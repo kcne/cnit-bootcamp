@@ -51,4 +51,4 @@ export async function createPaginatedResponse<T>(
       hasPreviousPage: page > 1,
     },
   };
-} 
+}

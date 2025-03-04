@@ -12,4 +12,4 @@ export const getAllProducts = async (req: Request, res: Response): Promise<void>
     console.error('Error in getAllProducts:', error);
     res.status(500).json({ error: 'Failed to fetch products' });
   }
-}; 
+};

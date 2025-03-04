@@ -26,8 +26,6 @@ app.get('/protected', authenticateToken, (req: AuthenticatedRequest, res) => {
   });
 });
 
-
-
 // Error handling for undefined routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' })
