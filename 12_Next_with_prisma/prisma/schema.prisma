@@ -1,6 +1,17 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// 1. Create Book model
+// 2. Do the migration  =>npx prisma migrate dev --name add_book_model
+// 3. api/books/route.ts => GET=> get all books, POST => create new book
+// 4. api/books/[id]/route.ts => GET(id) => get book by id, PUT(id) => update book by id, DELETE(id) =>  delete book with given id
+// 5. books/page.tsx => displays all books as cards
+// 6. books/new/page.tsx => page for creation of new book with create new book form component
+// 7. books/[id]/page.tsx => display book details of the book with given id
+// 8. books/[id]/edit/page.tsx => edit form for book with bookId
+// 9. delete modal, when user clicks delete the book gets deleted.
+// 10. add view books button to the homepage
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -32,3 +43,8 @@ model Course {
 }
 
 
+model Books{
+  id          Int       @id @default(autoincrement())
+  title       String
+  instructor  String
+}
