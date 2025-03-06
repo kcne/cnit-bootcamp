@@ -22,7 +22,6 @@ export class PrismaRepositoryService<T, K extends string> {
 
     const where = filters ? buildWhereClause(filters) : {};
     const orderBy = sort ? { [sort.field]: sort.order } : { id: 'desc' };
-    const include = this.getIncludeOptions?.(includeUser);
 
     const [items, total] = await Promise.all([
       this.model.findMany({
@@ -30,7 +29,6 @@ export class PrismaRepositoryService<T, K extends string> {
         skip,
         take: limit,
         orderBy,
-        include
       }),
       this.model.count({ where })
     ]);
@@ -38,9 +36,6 @@ export class PrismaRepositoryService<T, K extends string> {
     return createPaginatedResponse(items, total, pagination);
   }
 
-  protected getIncludeOptions?(includeUser?: boolean): any {
-    return undefined;
-  }
 
   async findById(id: number): Promise<T | null> {
     return this.model.findUnique({

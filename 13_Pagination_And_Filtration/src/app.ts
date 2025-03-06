@@ -4,6 +4,7 @@ import lectureRoutes from './routes/lectureRoutes'
 import { logger } from './middlewares/logger'
 import { AuthenticatedRequest, authenticateToken } from './middlewares/authenticateToken'
 import productRoutes from './routes/productRoutes'
+import inventoryRoutes from './routes/inventoryRoutes'
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.use(logger);
 app.use('/api/users', userRoutes)
 app.use('/api/lectures', lectureRoutes)
 app.use('/api/products', productRoutes)
+app.use('/api/inventory', inventoryRoutes)
 
 
 app.get('/protected', authenticateToken, (req: AuthenticatedRequest, res) => {
