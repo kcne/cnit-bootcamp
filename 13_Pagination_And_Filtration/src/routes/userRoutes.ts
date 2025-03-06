@@ -1,7 +1,7 @@
 import express from 'express'
 import { deleteUser, getUserById, getUsers, login, register } from '../controllers/userController'
 import { z } from 'zod';
-import { validate } from '../middlewares/validate';
+import { validateRequest } from '../middlewares/validateRequest';
 
 
 const router = express.Router()
@@ -16,7 +16,7 @@ router.get('/', getUsers)
 
 router.post('/login', login)
 
-router.post('/register', validate(UserSchema), register);
+router.post('/register', validateRequest(UserSchema), register);
 
 // Get a user by ID
 router.get('/:id', getUserById)

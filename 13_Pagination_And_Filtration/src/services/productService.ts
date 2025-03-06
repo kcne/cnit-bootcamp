@@ -1,50 +1,23 @@
 import prisma from '../prisma';
+import { Product } from '@prisma/client';
+import { PrismaRepositoryService } from './prismaRepositoryService';
 
-interface ProductPaginationResult {
-  items: any[];
-  meta: {
-    currentPage: number;
-    itemsPerPage: number;
-    totalItems: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  };
-}
+type ProductFields = 'id' | 'name' | 'description' | 'createdAt';
 
-export class ProductService {
-  async getAllProducts(page: number = 1, itemsPerPage: number = 10): Promise<ProductPaginationResult> {
-    // Ensure valid pagination parameters
-    const validPage = Math.max(1, page);
-    const validItemsPerPage = Math.max(1, Math.min(100, itemsPerPage)); // Limit max items per page to 100
-    const skip = (validPage - 1) * validItemsPerPage;
+export class ProductService extends PrismaRepositoryService<Product, ProductFields> {
+  constructor() {
+    super(prisma, prisma.product);
+  }
 
-    // Execute both queries in parallel
-    const [products, totalItems] = await Promise.all([
-      prisma.product.findMany({
-        skip,
-        take: validItemsPerPage,
-        orderBy: {
-          id: 'desc'
+  // You can add product-specific methods here
+  async searchByName(name: string): Promise<Product[]> {
+    return this.prisma.product.findMany({
+      where: {
+        name: {
+          contains: name
         }
-      }),
-      prisma.product.count()
-    ]);
-
-    // Calculate pagination metadata
-    const totalPages = Math.ceil(totalItems / validItemsPerPage);
-
-    return {
-      items: products,
-      meta: {
-        currentPage: validPage,
-        itemsPerPage: validItemsPerPage,
-        totalItems,
-        totalPages,
-        hasNextPage: validPage < totalPages,
-        hasPreviousPage: validPage > 1
       }
-    };
+    });
   }
 }
 

@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { z, ZodTypeAny } from 'zod';
-
+import * as z from 'zod';
 // Generic validation middleware
-export const validate = <T extends ZodTypeAny>(schema: T) => {
+export const validate = <T extends z.ZodTypeAny>(schema: T) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
       schema.parse(req.body); // Validate the request body
