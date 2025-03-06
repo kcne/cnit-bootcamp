@@ -1,18 +1,32 @@
 import prisma from '../prisma';
+import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { PaginationOptions, getPaginationOptions, createPaginatedResponse } from '../utils/pagination';
+import { PaginationOptions, createPaginatedResponse } from '../utils/queryBuilder';
+import { PrismaRepositoryService } from './prismaRepositoryService';
 
-export class UserService {
-  async getAllUsers(paginationOptions?: PaginationOptions) {
-    const { skip, take, page, limit } = getPaginationOptions(paginationOptions);
+type UserFields = 'id' | 'name' | 'email' | 'createdAt';
+
+export class UserService extends PrismaRepositoryService<User, UserFields> {
+  constructor() {
+    super(prisma, prisma.user);
+  }
+
+  async getAllUsers(options: PaginationOptions) {
+    const page = options.page || 1;
+    const limit = options.limit || 10;
+    const skip = (page - 1) * limit;
 
     const [users, total] = await Promise.all([
       prisma.user.findMany({
         skip,
-        take,
-        orderBy: {
-          id: 'desc'
+        take: limit,
+        orderBy: { id: 'desc' },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true
         }
       }),
       prisma.user.count()
@@ -33,19 +47,42 @@ export class UserService {
     });
   }
 
-  async register(email: string, password: string) {
+  async register(email: string, password: string, name: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return await prisma.user.create({
-      data: { email, password: hashedPassword },
+      data: { 
+        email, 
+        password: hashedPassword,
+        name 
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true
+      }
     });
   }
 
   async login(email: string, password: string) {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ 
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        password: true
+      }
+    });
     
     if (user && await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ userId: user.id }, 'super_secret_key', { expiresIn: '1h' });
-      return { success: true, token, user };
+      const { password: _, ...userWithoutPassword } = user;
+      const token = jwt.sign(
+        { userId: user.id }, 
+        process.env.JWT_SECRET || 'super_secret_key', 
+        { expiresIn: '1h' }
+      );
+      return { success: true, token, user: userWithoutPassword };
     }
     return { success: false };
   }

@@ -1,17 +1,33 @@
 import express from 'express'
-import { createLecture, deleteLecture, getAllLectures, getMyLectures, getLectureById } from '../controllers/lectureController'
+import { 
+  getAllLectures, 
+  getMyLectures, 
+  searchLectures,
+  getLectureById, 
+  createLecture, 
+  updateLecture, 
+  deleteLecture 
+} from '../controllers/lectureController'
 import { authenticateToken } from '../middlewares/authenticateToken';
+import { validateRequest } from '../middlewares/validateRequest';
+import { 
+  lectureQuerySchema, 
+  createLectureSchema, 
+  updateLectureSchema 
+} from '../schemas/lectureSchema';
 
 const router = express.Router()
 
-// Public route - get all lectures
+// Public routes
 router.get('/', getAllLectures);
+router.get('/:id', getLectureById);
+router.post('/search', validateRequest(lectureQuerySchema), searchLectures);
 
 // Protected routes
 router.use(authenticateToken);
 router.get('/my-lectures', getMyLectures);
-router.post('/', createLecture);
-router.get('/:id', getLectureById);
+router.post('/', validateRequest(createLectureSchema), createLecture);
+router.put('/:id', validateRequest(updateLectureSchema), updateLecture);
 router.delete('/:id', deleteLecture);
 
 export default router

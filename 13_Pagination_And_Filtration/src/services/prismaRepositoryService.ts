@@ -16,24 +16,30 @@ export class PrismaRepositoryService<T, K extends string> {
   }
 
   async findAll(options: QueryOptions<K>): Promise<PaginatedResult<T>> {
-    const { pagination, sort, filters } = options;
+    const { pagination, sort, filters, includeUser } = options;
     const { page, limit } = pagination;
     const skip = (page - 1) * limit;
 
     const where = filters ? buildWhereClause(filters) : {};
     const orderBy = sort ? { [sort.field]: sort.order } : { id: 'desc' };
+    const include = this.getIncludeOptions?.(includeUser);
 
     const [items, total] = await Promise.all([
       this.model.findMany({
         where,
         skip,
         take: limit,
-        orderBy
+        orderBy,
+        include
       }),
       this.model.count({ where })
     ]);
 
     return createPaginatedResponse(items, total, pagination);
+  }
+
+  protected getIncludeOptions?(includeUser?: boolean): any {
+    return undefined;
   }
 
   async findById(id: number): Promise<T | null> {
