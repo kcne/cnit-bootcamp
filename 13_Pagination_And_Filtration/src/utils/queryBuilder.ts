@@ -32,7 +32,6 @@ export interface QueryOptions<T extends string> {
 // Generic function to build Prisma where clause
 export function buildWhereClause(filters: FilterOption[] = []) {
   const whereClause: Record<string, any> = {};
-  
   filters.forEach(filter => {
     switch (filter.operator) {
       case 'contains':
@@ -78,7 +77,6 @@ export function createPaginatedResponse<T>(
   options: PaginationOptions
 ): PaginatedResult<T> {
   const totalPages = Math.ceil(total / options.limit);
-  
   return {
     data,
     meta: {
@@ -90,4 +88,4 @@ export function createPaginatedResponse<T>(
       hasPrevPage: options.page > 1
     }
   };
-} 
+};
